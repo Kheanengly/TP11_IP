@@ -4,7 +4,7 @@ const update = async (req,res) => {
     try {
         console.log(JSON.stringify(req.body));
         if(req.user.ascess == true) {
-            
+            console.log(req.body)
             const result = await table.productProdouct.updateMany(
                 {productID: req.body.productID},
                 {$set:req.body}

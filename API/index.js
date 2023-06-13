@@ -4,12 +4,15 @@ const router = express.Router();
 const path = require("path"); // The Path module provides a way of working with directories and file paths.
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const cors = require('cors');
 
 app.use(express.text())
 
 app.use(express.json()) // user json packge in express
 app.use(cookieParser()) 
 app.use(router)
+
+app.use(cors("*"))
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())

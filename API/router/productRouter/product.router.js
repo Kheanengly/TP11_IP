@@ -19,7 +19,7 @@ const {check_pull,check_push} = require("../../middleware/productValidation/push
 const Product = (app) => {
     app.post("/api/create_product", [check_createProduct,upload.single('image'),IncrementPID,checkProductAvalibale],createP.Create)
     app.get("/api/read_product",readP.Read)
-    app.post("/api/update_product",[check_updateProduct,checkSubcategoryAvalibaleID,checkProductvalibaleID],updateP.update)
+    app.post("/api/update_product",[check_updateProduct,checkSubcategoryAvalibaleID,upload.single('image'),checkProductvalibaleID],updateP.update)
     app.post("/api/push_store",[check_push,checkPID],shop.pushshop_price)
     app.post("/api/pull_store",[check_pull,checkPID],shop.pullshop_price)
     app.post("/api/delete_product",[check_deleteProduct,checkPID],deleteP.deletep)
