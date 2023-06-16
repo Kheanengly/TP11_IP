@@ -14,15 +14,11 @@ const Read = (req,res) => {
     }
 }
 
-const Read_ID = (req,res) => {
+const Read_ID = async (req,res) => {
     try {
         console.log(req.params.id)
-        let result = table.subcategoryProdouct.find({subcategoryID:req.params.id}).then((result) => {
-            res.send(result)
-        }).catch((error) => {
-            console.log(error)
-        });
-        res.send(result)
+        let result = await table.subcategoryProdouct.find({categoryID:req.params.id})
+        res.json({data:result})
     } catch (error) {
         console.log("error")
         res.status(0).send(error);  

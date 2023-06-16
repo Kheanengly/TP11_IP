@@ -15,7 +15,7 @@ const { request } = require("express");
 const Subcategory = (app) => {
     app.post("/api/create_subcategory",[check_createSubcategory,getNextSequenceValue,checkSubcategoryAvalibale],createS.Create)
     app.get("/api/read_subcategory",readS.Read)
-    app.get("/api/read_subcategory_ID/:id",readS.Read_ID)
+    app.get("/api/read_subcategory_CID/:id",readS.Read_ID)
     app.get("/api/update_subcategory",[check_updateSubcategory,checkCategoryAvalibaleID,checkSubcategoryAvalibaleID],updateS.update)
     app.post("/api/delete_subcategory",[check_deleteSubcategory,checkSIDAvalibale_forDelete],deleteS.deletes)
 }
