@@ -8,8 +8,8 @@ const  getNextSequenceValue =  async(req,res,next) => {
         if(sequenceDocument.length==0){
             const conter = await table.subcategoryProdouct.find({
             });
-            console.log(conter.length);
-            req.user = {"subcategoryID":conter.length+1}
+            console.log(conter[conter.length-1].subcategoryID);
+            req.user = {"subcategoryID":conter[conter.length-1].subcategoryID+1}
         }else{
             res.json({message : "Name's Subcategory have already"})
         }

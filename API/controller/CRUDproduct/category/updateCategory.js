@@ -1,5 +1,8 @@
+const { json } = require("body-parser");
 const table = require("../../../db/blog/tableProduct");
 const update = async (req,res) => {
+    console.log(req.body);
+    
     try {
         if(req.user.ascess == true) {
             

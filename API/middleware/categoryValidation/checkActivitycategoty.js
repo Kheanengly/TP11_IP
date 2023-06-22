@@ -9,16 +9,22 @@ function check_createCategory(req,res,next){
 }
 
 function check_updateCategory(req,res,next){
-    console.log(req.body);
-    const data=req.body;
+    let data;
+    console.log(req.params);
+    if(req.body.categoryID!==0){
+        data = req.body;
+    }else{
+        data = req.params;
+    }
+    
     const {error}=update_categoryValidation(data);
     if(error){ return res.status(400).send(error.details[0].message);}
     next()
 }
 
 function check_deleteCategory(req,res,next){
-    console.log(req.body);
-    const data=req.body;
+    console.log(req.params);
+    const data=req.params;
     const {error}=delete_categoryValidation(data);
     if(error){ return res.status(400).send(error.details[0].message);}
     next()

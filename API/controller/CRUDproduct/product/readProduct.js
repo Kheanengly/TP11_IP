@@ -25,4 +25,15 @@ const Read = async (req,res) => {
 
 }
 
-module.exports = {Read}
+const Read_ID = async (req,res) => {
+    try {
+        console.log(req.params.id)
+        const result = await table.productProdouct.find({subcategoryID: req.params.id});
+        res.json({data:result})
+    } catch (error) {
+        console.log("error")
+        res.status(0).send(error);  
+    }
+}
+
+module.exports = {Read, Read_ID}

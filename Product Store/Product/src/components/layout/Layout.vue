@@ -1,29 +1,20 @@
 
-
 <template>
   <a-layout>
-    <a-layout-header class="header" style="position: relative; display: flex; justify-content: space-around;">
-      <div class="logo" />
-      <div id="menu_bar" style="" >
-        <a-menu 
-          id="list_menu"
-          theme="dark"
-          mode="horizontal"
-          :style="{ lineHeight: '64px'}"
-         
-          >
-          <a-menu-item class="items" key="1">Home</a-menu-item>
-          <a-menu-item class="items" key="2">About</a-menu-item>
-          <a-menu-item class="items" key="3">Product</a-menu-item>
-        </a-menu>
-      
-      </div>
+    <a-layout-header class="header" style="width: 100%;">
+     <div id="logo">
+        <img src="../../assets/logo.svg" style="width: 70px; margin-top:20px ;">
+
+     </div>
+     <div id="title">
+        <h1 style="font-size: 40px; color: rgb(190, 184, 184);">Eletronic Products</h1>
+     </div>
     </a-layout-header>
     <a-layout>
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
          
-          multiple= "true"
+         c
           mode="inline"
           :defaultSelectedKeys="['101']"
           :defaultOpenKeys="['101']"
@@ -35,7 +26,7 @@
             <a-sub-menu  v-for="(listItem,index1) in listItems " :key=listItem.categoryID @click="this.getcategoryByID(listItems[index1].categoryID ) ">
               <template #title>
                 <span>
-                  <user-outlined />
+                  <user-outlined style="font-size: 22px;"/>
                   {{ listItem.name }}
                 </span>
               </template>
@@ -48,7 +39,7 @@
                 </div>
               </a-menu-item>      -->
               <div v-for="(sub,index) in listSubItems" :key="index">
-                <a-menu-item v-if="sub.categoryID === listItem.categoryID" :key ="sub.subcategoryID">
+                <a-menu-item v-if="sub.categoryID === listItem.categoryID" :key ="sub.subcategoryID" @click="getproductID(sub.subcategoryID)">
                   {{sub.name}}
                 </a-menu-item>
               </div>
@@ -56,15 +47,18 @@
         </a-menu>
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
-        <a-breadcrumb style="margin: 16px 0">
+        <a-breadcrumb style="margin: 16px 0; color:rgb(206, 206, 206); font-size: 20px;">
           <a-breadcrumb-item>Home</a-breadcrumb-item>
-          <a-breadcrumb-item>List</a-breadcrumb-item>
-          <a-breadcrumb-item>App</a-breadcrumb-item>
+          <a-breadcrumb-item>
+            <router-view  ></router-view>
+          </a-breadcrumb-item>
+          <a-breadcrumb-item style="color: rgb(206, 206, 206);">App</a-breadcrumb-item>
         </a-breadcrumb>
         <a-layout-content
           :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
         >
-          Content
+          <listProduct :dataObject="this.listProductID" />
+         <h />
         </a-layout-content>
       </a-layout>
     </a-layout>
@@ -87,6 +81,33 @@
   background: #fff;
 }
 
+.ant-layout *{
+  font-size: 18px;
+}
+
+.ant-menu{
+  background-color:rgb(102, 93, 93);
+
+}
+
+
+.ant-layout{
+  background-color: rgba(65, 71, 84, 0.567);
+}
+
+header{
+  height: 100px;
+}
+
+.ant-menu-overflow-item{
+  display: flex;
+  justify-content: center;
+}
+
+.ant-menu{
+  font-size: 16pxx;
+}
+
 #menu_bar{
   margin: 0;
   display: flex;
@@ -106,9 +127,24 @@
   
 }
 
-
 #list_menu::before{
   content: unset;
+}
+
+
+
+.header{
+  display: flex;
+}
+
+.header #logo{
+  width: 30%;
+ 
+}
+.header #title{
+  width: 70%;
+  text-align: center;
+  margin-top: 10px;
 }
 
 
@@ -118,18 +154,16 @@
 <script >
 import { UserOutlined, LaptopOutlined, NotificationOutlined, ShopTwoTone } from '@ant-design/icons-vue';
 import { defineComponent, nextTick, ref, toValue } from 'vue';
+import listProduct from '../../views/list_product.vue'
 // import axios from 'axios';
 export default {
-  
-              listcategory : `<a-menu-item class="items" key="1">Home</a-menu-item>`,
-              // selectedKeys1: ref<string[]>(['2']),
-             
-          
-          
-              
-              selectedKeys2: ref<String>(["Laptops","Cars","Phone"]),
-              collapsed: ref<Boolean>(false),
-              openKeys: ref<String>(['Laptops']),
+
+        // listcategory : `<a-menu-item class="items" key="1">Home</a-menu-item>`,
+        // selectedKeys1: ref<string[]>(['2']),
+        // selectedKeys2: ref<String>(["Laptops","Cars","Phone"]),
+        // collapsed: ref<Boolean>(false),
+        // openKeys: ref<String>(['Laptops']),
+
         data() {
           return {
               listsub : ref([]),
@@ -138,8 +172,8 @@ export default {
               oneItem : [],
               listSubItems: [],
               listProduct: [],
-              // test : [[ {name:"Asus"},{name:"Lenovo"},{name:"Dell"}],[{name:"Toyota"},{name:"Mazada"},{name:"Merserdes"},{name:"BMW"}],[{name:"Iphone"}]],
-             
+              listProductID : [],
+              // test : [[ {name:"Asus"},{name:"Lenovo"},{name:"Dell"}],[{name:"Toyota"},{name:"Mazada"},{name:"Merserdes"},{name:"BMW"}],[{name:"Iphone"}]],     
           }
         },
         methods: {
@@ -153,43 +187,44 @@ export default {
                 let res =await fetch("http://localhost:8080/api/read_subcategory_CID/"+id);
                 // console.log(`http://localhost:8080/api/subcategory_ID/`+id)
                 this.oneItem = await res.json()       
-                console.log(this.oneItem);
-                console.log(this.oneItem.data[0].name)
-                
-  
-                
+                // console.log(this.oneItem);
+                // console.log(this.oneItem.data[0].name)   
           },
           async getitems() {
              let res = await fetch("http://localhost:8080/api/read_subcategory");
                 this.listSubItems = await res.json();
-                console.log(this.listSubItems[0].subcategoryID)
+                // console.log(this.listSubItems[0].subcategoryID)
           },
           async getproduct() {
             let res = await fetch("http://localhost:8080/api/read_product");
                 this.listProduct = await res.json();
+                // console.log(this.listProduct)
                 // console.log(this.listProduct.data[0].name)
           },
-
-          
-             
-
-          // Show(){
-          //   console.log(this.listSubItems[0])
-          // }
+          async getproductID(id) {
+            console.log(id)
+            let res = await fetch("http://localhost:8080/api/read_product_PID/"+id)
+              this.listProductID = await res.json();
+              console.log(this.listProductID)
+              console.log(this.listProductID.data[0])
+          },
+          async show(){
+            console.log(this.listProductID)
+          }
 
         },
         mounted() {
           this.getcategory()
           this.getitems()
           this.getproduct()
+          // this.getproductID(1)
           // this.show()
 
         },components : {
             UserOutlined,
             LaptopOutlined,
             NotificationOutlined,
-        }
-
-        
+            listProduct,
+        }        
 };
 </script>

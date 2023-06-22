@@ -1,7 +1,13 @@
 const table  = require("../../db/blog/tableProduct");
 
 const checkCategoryAvalibaleID = async(req,res,next) => {
-    const result = await table.categoryProdouct.find({categoryID: req.body.categoryID})
+    let result;
+    if(req.params.categoryID) {
+         result = await table.categoryProdouct.find({categoryID: req.params.categoryID})
+    }else{
+        result = await table.categoryProdouct.find({categoryID: req.body.categoryID})
+    }
+    
     let ascess;
     let message;
     console.log("cID",result.length)

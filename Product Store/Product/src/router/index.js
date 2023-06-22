@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import layout from '../components/layout/Layout.vue'
-import test from '../components/layout/test.vue'
-const router = createRouter({
+import listP from '../views/list_product.vue'
+
+const router = new createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -20,12 +21,12 @@ const router = createRouter({
     },
     {path: '/product',
       name: 'product',
-      component : () => layout
-    },{
-      path: "/test",
-      name:'test',
-      component : () => test
-    }
+      component : () => import("../components/layout/Layout.vue")
+    }, 
+    {path: '/Admit',
+    name: 'admit',
+    component : () => import("../components/layout/Daskboard.vue")
+  },
   ]
 })
 

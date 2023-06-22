@@ -3,7 +3,7 @@ const table = require("../../../db/blog/tableProduct");
 const deletec = async (req,res) => {
     try {
         if(req.user.ascess == true){
-            const result = await table.categoryProdouct.deleteMany({categoryID:req.body.categoryID});
+            const result = await table.categoryProdouct.deleteMany({categoryID:req.params.categoryID});
             console.log(result);
             res.json({update: true,message: "Delete Success"})
         }else{

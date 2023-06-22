@@ -10,8 +10,8 @@ const {checkCategoryAvalibaleID} =require("../../middleware/categoryValidation/c
 const Category = (app) => {
     app.post("/api/create_category",check_createCategory,checkCategoryAvalibale,createC.Create)
     app.get("/api/read_category",readC.Read)
-    app.get("/api/update_category",check_updateCategory,checkCategoryAvalibaleID,updateC.update)
-    app.post("/api/delete_categoty",check_deleteCategory,checkCategoryAvalibaleID,deleteC.deletec)
+    app.post("/api/update_category",check_updateCategory,checkCategoryAvalibaleID,updateC.update)
+    app.delete("/api/delete_categoty/:categoryID",check_deleteCategory,checkCategoryAvalibaleID,deleteC.deletec)
 }   
 
 module.exports = Category
