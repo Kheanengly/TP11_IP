@@ -2,7 +2,7 @@
     <a-layout-content style="margin: 0 16px">
         <a-breadcrumb style="margin: 16px 0;display: flex; justify-content: space-around ">
           <div>
-            <h1 style="font-size: 18px;">Daskboard Category</h1>
+            <h1 style="font-size: 18px;">Daskboard Items</h1>
           </div>
           <div>   
             <a-breadcrumb-item>User</a-breadcrumb-item>
@@ -14,11 +14,22 @@
               <PlusOutlined />
             </template>
           </a-button>
-          <a-modal  v-model:visible="visible1" width="1000px" title="Create Category" @ok="createCategoty" >
+          <a-modal v-model:visible="visible1" width="1000px" title="Item of Product" @ok="createCategoty" >
             <a-space direction="vertical">
-            <label style="font-size: 16px;">ID Category</label>
-            <a-input v-model="new_categoryID" placeholder="Input Category ID"  @input="handleInput_categoryID" style="width: 500px; "/>
             <label style="font-size: 16px;">Name Category</label>
+              <a-select
+                v-model:value="value"
+                show-search
+                placeholder="Select a person"
+                style="width: 500px"
+                :options="listC"
+                :filter-option="filterOption"
+                @focus="handleFocus"
+                @blur="handleBlur"
+                @change="handleChange"
+
+              ></a-select>
+            <label style="font-size: 16px;">Name Items</label>
             <a-input v-model="new_name" placeholder="Input Name Category" @input="handleInput_nameCategory" style="width: 500px"/>
             </a-space>
           </a-modal>
@@ -29,18 +40,18 @@
             <!-- Listing data from table  -->
             <a-table
                     :columns="columns"
-                    :data-source="listC"
+                    :data-source="listSubC"
                     :row-key = "getRowKey" 
                     bordered 
                     
                                   
                             >
                 <template #bodyCell="{ column, index, record }" >
-                <template v-if="column.key === 'name'" >{{ record.name }}</template>
+                <template v-if="column.key == 'name'" >{{ record.name }}</template>
                 <template v-else-if="column.key === 'Editor'">
                    <a-space>
                     <a-button type="primary" style="background-color: ;"  @click="showModal(index)" :key="index">Edit</a-button>
-                    <a-button type="primary" style="background-color: rgb(255, 44, 44);border: rgb(185, 20, 20); border-radius: ;" @click="deleteCategory(index)" >Delete</a-button>
+                    <a-button type="primary" style="background-color: rgb(255, 44, 44);border: rgb(185, 20, 20); border-radius: ;"  @click="deleteSubCategory(index)" >Delete</a-button>
                     <a-modal
                       v-model:visible="visible"
                       title="Category"
@@ -50,14 +61,25 @@
                     >
                       <a-space direction="vertical">
                         <div>
-                          <h3>ID : {{ this.default_categoryID }}</h3>
+                          <h3>Category : {{ this.default_categoryID }}</h3>
                           <h3>Old Name : {{ this.default_name }}</h3>
                         </div>
                       <div style="text-align: centers;"><h2>Update Information Category</h2></div>
-                      <label>ID of Category</label>
-                      <a-input :v-model="new_categoryID" placeholder="Input Category ID"  @input="handleInput_categoryID" style="width: 300px"/>
-                      <label>New Name Category</label>
-                      <a-input :v-model="new_name" placeholder="Input Name Category"   @input="handleInput_nameCategory" style="width: 300px"/>
+                      <label style="font-size: 16px;">Name Category</label>
+                        <a-select
+                          v-model:value="value"
+                          show-search
+                          placeholder="Select a Category"
+                          style="width: 300px"
+                          :options="listC"
+                          :filter-option="filterOption"
+                          @focus="handleFocus"
+                          @blur="handleBlur"
+                          @change="handleChange"
+
+                        ></a-select>
+                      <label>New Items</label>
+                      <a-input :v-model="new_name" placeholder="Input Items"   @input="handleInput_nameCategory" style="width: 300px"/>
                       </a-space>
 
                     </a-modal>
@@ -84,46 +106,61 @@ import {
   PlusOutlined
   
 } from '@ant-design/icons-vue';
-import  { defineComponent, ref, withKeys   } from 'vue'; 
+import  { defineComponent, ref, withKeys    } from 'vue'; 
 import { Ref, UnwrapRef ,createVNode } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
-import { message, Modal } from 'ant-design-vue';
+import { message, Modal,SelectProps  } from 'ant-design-vue';
 import type { TableProps } from 'ant-design-vue';
 const visible = ref<boolean>(false);
 const visible1 = ref<boolean>(false);
+
+
+
 
 
 const columns= [
 
     {
         title : 'ID',
-        dataIndex : 'categoryID',
+        dataIndex : 'subcategoryID',
         sorter : true,
-        width : '30%',
-        key:'categoryID',
+        width : '25%',
+        key:'subcategoryID',
     },
     {
-        title : 'Name',
+        title : 'Item',
         dataIndex: 'name',
         sorter : true,
-        width : '30%',
+        width : '25%',
         key:'name',
 
 
     },
     {
+        title : 'CategoryID',
+        dataIndex: 'categoryID',
+        sorter : true,
+        width : '25%',
+        key:'categoryID',
+
+
+    },
+    {
         title : 'Editor',
-        width : '30%',
+        width : '25%',
         key : 'Editor'
     }
 
 ]
+
+const options = ref<SelectProps['options']>([]);
+
 interface DataItem {
-  categoryID: string;
+  subcategoryID: number;
   name: string;
+  categoryID:number;
 
 }
-
     
 export default defineComponent({
     props: {
@@ -132,6 +169,7 @@ export default defineComponent({
       required: true,
     },
   },
+
   components: {
     UserOutlined,
   VideoCameraOutlined,
@@ -142,37 +180,62 @@ export default defineComponent({
     
   },
 
+
+  setup(){
+    const listC = ref([])
+    return{
+      listC
+    }
+  },
+
   data() {
     return {
       collapsed: ref<boolean>(false),
       selectedKeys: ref<string[]>(['1']),
-      listC : ref([]),
       columns,
+      listSubC : ref([]),
       itemRefs : ref([]),
+      index : ref(),
       visible,
       confirm,
       visible1,
+      value: ref<string | undefined>(undefined),
+      options,
       
 
       // data from dataform of update category 
       new_categoryID : ref(),
       new_name : ref(''),
-      default_categoryID : ref(),
+      default_categoryID : ref(''),
       default_name: ref(''),
      
     };
   },
   methods:{
-    async listCategory(){
+      async listCategory(){
             let res =await fetch("http://localhost:8080/api/read_category");
             this.listC = await res.json();
-            console.log(this.listC);
+            
+            this.listC = this.listC.map(item => {
+              return {
+                value: item.categoryID,
+                label: item.name
+              }
+            })
+            this.option = this.listC;
+            console.log(this.option)
             return this.listC
-           
         },
+      async listSubCategory(){
+              let res = await fetch("http://localhost:8080/api/read_subcategory")
+              this.listSubC = await res.json();
+              console.log(this.listSubC);
+              return this.listSubC
+      },
+
       async createCategoty(event){
         visible1.value = false;
-        fetch("http://localhost:8080/api/create_category",{
+        fetch("http://localhost:8080/api/create_subcategory",{
             method:"POST",
             headers: {
               "Content-Type": "application/json"    // declares format of data
@@ -187,7 +250,7 @@ export default defineComponent({
               .then(data => {
               // Process the response data
               console.log(data);
-              this.listC = this.listCategory()
+              this.listSubC = this.listSubCategory()
               return data
               
             }).then(data => {
@@ -202,16 +265,17 @@ export default defineComponent({
       },
     
 
-        async deleteCategory(index){
-          let res = await this.listC[index].categoryID
-       
-           fetch("http://localhost:8080/api/delete_categoty/"+res,{
-            method:"DELETE",
+        async deleteSubCategory(index){
+          let res = await this.listSubC[index].subcategoryID
+          
+          console.log(res)
+           fetch("http://localhost:8080/api/delete_subcategory/"+res,{
+            method:"POST",
            }).then(response => response.json())
               .then(data => {
               // Process the response data
               console.log(data);
-              this.listC = this.listCategory()
+              this.listSubC = this.listSubCategory()
               return data
                
             }).then(data => {
@@ -229,8 +293,11 @@ export default defineComponent({
 
         async UpdateCategory(){
           visible.value = false;
+
+          let res = await this.listSubC[this.index].subcategoryID
+          console.log(res)
           console.log(this.new_categoryID,this.new_name)
-          fetch("http://localhost:8080/api/update_category",{
+          fetch("http://localhost:8080/api/update_subcategory",{
             method:"POST",
             headers: {
               "Content-Type": "application/json"    // declares format of data
@@ -239,13 +306,14 @@ export default defineComponent({
               {
                 "categoryID": this.new_categoryID,              // keys and values we want to add
                 "name": this.new_name,
+                "subcategoryID" : res
               }
             ) 
            }).then(response => response.json())
               .then(data => {
               // Process the response data
               console.log(data);
-              this.listC = this.listCategory()
+              this.listSubC = this.listSubCategory()
               return data
             
             }).then(data =>{
@@ -275,17 +343,26 @@ export default defineComponent({
         handleInput_nameCategory(event){
           console.log(event.target.value);
           this.new_name = event.target.value
+          
         },
 
         async show(){
-         
+            
+            console.log(this.new_categoryID,this.new_name)
         },
         
          showModal(index){
             console.log(index)
+            this.index = index
             visible.value = true;
-            this.default_categoryID = this.listC[index].categoryID
-            this.default_name = this.listC[index].name
+            let i=0;
+            for( i=0;i<this.listC.length;i++){
+              console.log( this.listC[i])
+              if(this.listSubC[index].categoryID === this.listC[i].value){
+                this.default_categoryID = this.listC[i].label
+              }
+            }
+            this.default_name = this.listSubC[index].name
           },
           hideModal (event){
             visible.value = false;
@@ -299,6 +376,20 @@ export default defineComponent({
             console.log(this.new_categoryID,this.new_name)
           },
 
+          handleChange (value: string){
+            this.new_categoryID = value;
+            console.log(`selected ${value}`);
+          },
+          handleBlur  (){
+            console.log('blur');
+          },
+          handleFocus (){
+            console.log('focus');
+          },
+          filterOption(input: string, option: any)  {
+            return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+          },
+
      confirm  ()  {
       Modal.confirm({
         title: 'Confirm',
@@ -308,14 +399,13 @@ export default defineComponent({
         cancelText: 'Cancel',
       });
     },
-   
         
   },
   mounted(){
     this.listCategory()
-    // this.listSubCategory()
+    this.listSubCategory()
     // this.listProduct()
-    // this.show()
+    this.show()
   }
 
 }); 

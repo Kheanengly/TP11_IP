@@ -2,8 +2,9 @@ const table = require("../../../db/blog/tableProduct");
 
 const deletes = async (req,res) => {
     try {
+        console.log(req.params.subcategoryID);
         if(req.user.ascess == true){
-            const result = await table.subcategoryProdouct.deleteMany({subcategoryID:req.body.subcategoryID});
+            const result = await table.subcategoryProdouct.deleteMany({subcategoryID:req.params.subcategoryID});
             console.log(result);
             res.json({update: true,message: "Delete Success"})
         }else{

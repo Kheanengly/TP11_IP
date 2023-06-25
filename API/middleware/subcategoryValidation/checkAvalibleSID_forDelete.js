@@ -1,7 +1,13 @@
 const table  = require("../../db/blog/tableProduct");
 
 const checkSIDAvalibale_forDelete = async(req,res,next) => {
-    const result = await table.subcategoryProdouct.find({subcategoryID: req.body.subcategoryID})
+    let result;
+    if(req.params.subcategoryID) {
+
+        result = await table.subcategoryProdouct.find({subcategoryID: req.params.subcategoryID})
+   }else{
+       result = await table.subcategoryProdouct.find({subcategoryID: req.body.subcategoryID})
+   }
     let ascess;
     let message;
     console.log(result.length)

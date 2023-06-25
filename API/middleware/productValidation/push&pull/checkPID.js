@@ -1,7 +1,14 @@
 const table = require("../../../db/blog/tableProduct");
 
-const checkPID = (req,res,next) => {
-    const result = table.productProdouct.findOne({productID: req.body.productID});
+const checkPID = async (req,res,next) => {
+    let result;
+    if(req.params.productID) {
+
+        result = await table.productProdouct.find({productID: req.params.productID})
+   }else{
+       result = await table.productProdouct.find({productID: req.body.productID})
+   }
+    
     if(result.length!=0) {
         message = "";
         ascess = true

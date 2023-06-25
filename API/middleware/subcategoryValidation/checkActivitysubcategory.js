@@ -15,8 +15,8 @@ function check_updateSubcategory(req,res,next){
 }
 
 function check_deleteSubcategory(req,res,next){
-    console.log(req.body);
-    const data=req.body;
+    console.log(req.params,"this");
+    const data=req.params;
     const {error}=delete_subcategoryValidation(data);
     if(error){ return res.status(400).send(error.details[0].message);}
     next()

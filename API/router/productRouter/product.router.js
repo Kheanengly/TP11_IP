@@ -23,7 +23,7 @@ const Product = (app) => {
     app.post("/api/update_product",[check_updateProduct,checkSubcategoryAvalibaleID,upload.single('image'),checkProductvalibaleID],updateP.update)
     app.post("/api/push_store",[check_push,checkPID],shop.pushshop_price)
     app.post("/api/pull_store",[check_pull,checkPID],shop.pullshop_price)
-    app.post("/api/delete_product",[check_deleteProduct,checkPID],deleteP.deletep)
+    app.post("/api/delete_product/:productID",[check_deleteProduct,checkPID],deleteP.deletep)
 }
 
 module.exports = Product;

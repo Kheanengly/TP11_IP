@@ -6,8 +6,8 @@
         <img src="../../assets/logo.svg" style="width: 70px; margin-top:20px ;">
 
      </div>
-     <div id="title">
-        <h1 style="font-size: 40px; color: rgb(190, 184, 184);">Eletronic Products</h1>
+     <div id="title" >
+        <h1 style="font-size: 40px; color: rgb(190, 184, 184);">TOP 1 .COM</h1>
      </div>
     </a-layout-header>
     <a-layout>
@@ -26,7 +26,7 @@
             <a-sub-menu  v-for="(listItem,index1) in listItems " :key=listItem.categoryID @click="this.getcategoryByID(listItems[index1].categoryID ) ">
               <template #title>
                 <span>
-                  <user-outlined style="font-size: 22px;"/>
+                  <apartment-outlined  style="font-size: 22px;"/>
                   {{ listItem.name }}
                 </span>
               </template>
@@ -50,7 +50,7 @@
         <a-breadcrumb style="margin: 16px 0; color:rgb(206, 206, 206); font-size: 20px;">
           <a-breadcrumb-item>Home</a-breadcrumb-item>
           <a-breadcrumb-item>
-            <router-view  ></router-view>
+            <router-view  >About</router-view>
           </a-breadcrumb-item>
           <a-breadcrumb-item style="color: rgb(206, 206, 206);">App</a-breadcrumb-item>
         </a-breadcrumb>
@@ -86,7 +86,7 @@
 }
 
 .ant-menu{
-  background-color:rgb(102, 93, 93);
+  background-color:rgba(22, 21, 37, 0.879);
 
 }
 
@@ -131,7 +131,9 @@ header{
   content: unset;
 }
 
-
+span{
+  color:#cdcdcd
+}
 
 .header{
   display: flex;
@@ -152,7 +154,7 @@ header{
 </style>
 
 <script >
-import { UserOutlined, LaptopOutlined, NotificationOutlined, ShopTwoTone } from '@ant-design/icons-vue';
+import { UserOutlined, LaptopOutlined, NotificationOutlined, ShopTwoTone ,ApartmentOutlined} from '@ant-design/icons-vue';
 import { defineComponent, nextTick, ref, toValue } from 'vue';
 import listProduct from '../../views/list_product.vue'
 // import axios from 'axios';
@@ -225,6 +227,7 @@ export default {
             LaptopOutlined,
             NotificationOutlined,
             listProduct,
+            ApartmentOutlined
         }        
 };
 </script>

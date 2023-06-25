@@ -22,7 +22,7 @@ function check_updateProduct(req,res,next){
 }
 
 function check_deleteProduct(req,res,next){
-        const data=req.body;
+        const data=req.params;
         console.log("",data);
         // console.log("",data);
         const {error}=delete_productValidation(data);
