@@ -11,8 +11,7 @@ const create_productValidation = async(data) => {
             .min(1)
             .max(10000),
             image : Joi
-            .binary()
-            .encoding('base64'),
+            .string(),
             store : Joi
             .array()
             .items(

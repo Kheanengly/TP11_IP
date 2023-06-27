@@ -1,6 +1,6 @@
 const table = require("../../db/blog/tableProduct");
 
-const checkProductAvalibale = async (req,res,next) => {
+const   checkProductAvalibale = async (req,res,next) => {
 
     try {
         
@@ -22,8 +22,8 @@ const checkProductAvalibale = async (req,res,next) => {
             message = "Name's Product have already"
         }
         // console.log(req.user)
-        req.user = {"ascess":ascess ,"message":message, "productID":req.counter.productID};
-        // console.log(req.user) 
+        req.user = {"ascess":ascess ,"message":message, "productID":req.counter.productIDe,"contentImage":req.image};
+        console.log(req.user,"here") 
         next()
         
     } catch (error) {

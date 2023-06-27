@@ -3,14 +3,10 @@
     <a-row :gutter="16"  >
       <a-col class="gutter-row" :span="4" v-for="(data,index) in dataObject.data" :key="index" >
         <div class="gutter-box">
-            <div class="image" >
-                <a-image
-                    :preview="{ visible: false }"
-                    :width="100"
-                    :style="{height:'180px',width:'230px','margin-left':'10px','margin-top':'5px','border-radius':'5px 5px 0px 0px'}"
-                    src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp"
-                    @click="visible = true"
-                />
+            <div class="image" style="width: 100%">
+              
+                <img src="../../uploads/488-4889327_10241024-png-png-image-1024-x-1024-transparent.png.png" style="width: 100%; height: 180px;"/>
+              
             </div>
             <div class="list_shop">
               <h2>{{ data.name}}</h2>
@@ -90,7 +86,8 @@ export default {
   methods:{
     showinC(){
       console.log(this.dataObject)
-    }
+    },
+    
   },
   mounted(){
     this.showinC()

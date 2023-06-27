@@ -11,14 +11,15 @@ const Create = async (req, res) => {
                 name: name,
                 subcategoryID: subcategoryID,
                 productID : req.user.productID,
+                image : req.user.image,
                 store : store,
                 
             })
-            // console.log(req.file)
+            console.log(result)
             if(req.file){
                 result.image = req.file.path
             }
-            console.log(req.file.path)
+            // console.log(req.file.path)
           
             await result.save()
             // console.log(result)

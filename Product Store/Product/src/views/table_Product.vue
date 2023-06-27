@@ -15,9 +15,10 @@
             </template>
           </a-button>
           <a-modal v-model:visible="visible1" width="1000px" title="Create Product" @ok="createProduct" >
-
+            <form action="/stats" enctype="multipart/form-data" method="post">
             <div style="width: 100%; display: flex; justify-content: center">
               <a-space direction="vertical" >
+              
               <label style="font-size: 16px;">Name Items</label>
                 <a-select
                   v-model:value="value"
@@ -71,9 +72,10 @@
                 
                 </div>
               </div>
+          
               </a-space>
             </div>
-         
+          </form>
           </a-modal>
        
         </a-breadcrumb>
@@ -364,6 +366,7 @@ export default defineComponent({
                 "store[1][shop]" : this.shop2,
                 "store[0][price]" : this.price1,
                 "store[1][price]" : this.price2,
+                "file" : this.image
               }
             ) 
            }).then(response => response.json())

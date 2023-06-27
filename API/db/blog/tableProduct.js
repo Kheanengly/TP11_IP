@@ -18,7 +18,7 @@ const category = new Schema({
        name : {type:String , unique: true},
        subcategoryID : Number,
        productID : {type:Number , unique: true}, 
-       image : Buffer,
+       image :String,
        store : [{
             shop : {
                   type:String
