@@ -16,5 +16,16 @@ const Read = async(req,res) => {
     
 }
 
+const ReadID = async(req,res) => {
+    try {
+        console.log(req.body)
+        let result = table.categoryProdouct.find({categoryID:req.body.categoryID}).then((result) =>{
+            res.send(result)    
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-module.exports = {Read}
+
+module.exports = {Read,ReadID}

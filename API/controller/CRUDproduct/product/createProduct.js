@@ -5,19 +5,19 @@ const Create = async (req, res) => {
     if(req.user.ascess == true){
         console.log(req.body);
         try {
-            const {name,subcategoryID,store} = req.body;
-            console.log(req.body);
+            const {name,subcategoryID,image,store} = req.body;
+            console.log(req.user.productID);
             let result = new table.productProdouct({
                 name: name,
                 subcategoryID: subcategoryID,
-                productID : req.user.productID,
-                image : req.user.image,
+                productID : req.counter.productID,
+                image : image,
                 store : store,
                 
             })
             console.log(result)
             if(req.file){
-                result.image = req.file.path
+                result.image = image
             }
             // console.log(req.file.path)
           

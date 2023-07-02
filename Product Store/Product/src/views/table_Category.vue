@@ -30,7 +30,7 @@
             <a-table
                     :columns="columns"
                     :data-source="listC"
-                    :row-key = "getRowKey" 
+                    :row-key = "record => record.categoryID"
                     bordered 
                     
                                   
@@ -39,8 +39,8 @@
                 <template v-if="column.key === 'name'" >{{ record.name }}</template>
                 <template v-else-if="column.key === 'Editor'">
                    <a-space>
-                    <a-button type="primary" style="background-color: ;"  @click="showModal(index)" :key="index">Edit</a-button>
-                    <a-button type="primary" style="background-color: rgb(255, 44, 44);border: rgb(185, 20, 20); border-radius: ;" @click="deleteCategory(index)" >Delete</a-button>
+                    <a-button type="primary" style="background-color: ;"  @click="showModal(record.categoryID)" :key="index">Edit</a-button>
+                    <a-button type="primary" style="background-color: rgb(255, 44, 44);border: rgb(185, 20, 20); border-radius: ;" @click="deleteCategory(record.categoryID)" >Delete</a-button>
                     <a-modal
                       v-model:visible="visible"
                       title="Category"
@@ -148,6 +148,7 @@ export default defineComponent({
       selectedKeys: ref<string[]>(['1']),
       listC : ref([]),
       columns,
+      index:ref(),
       itemRefs : ref([]),
       visible,
       confirm,
@@ -202,10 +203,10 @@ export default defineComponent({
       },
     
 
-        async deleteCategory(index){
-          let res = await this.listC[index].categoryID
+        async deleteCategory(categoryID){
+         
        
-           fetch("http://localhost:8080/api/delete_categoty/"+res,{
+           fetch("http://localhost:8080/api/delete_categoty/"+categoryID,{
             method:"DELETE",
            }).then(response => response.json())
               .then(data => {
@@ -262,6 +263,18 @@ export default defineComponent({
             })
             
         },
+
+        getIndex(index){
+          let i=0;
+          // console.log(this.listC.length)
+          for(i=0;i<this.listC.length;i++){
+            // console.log(this.listC[i].categoryID)
+            if(this.listC[i].categoryID==index){
+              this.index = i;
+              // console.log(this.index)
+            }
+          }
+        },
        
         getRowKey(record, index) {
           return index; // Return the index as the row key
@@ -281,11 +294,13 @@ export default defineComponent({
          
         },
         
-         showModal(index){
-            console.log(index)
+         showModal(categoryID){
+            console.log(categoryID)
+            this.getIndex(categoryID)
+            console.log(this.index)
             visible.value = true;
-            this.default_categoryID = this.listC[index].categoryID
-            this.default_name = this.listC[index].name
+            this.default_categoryID = this.listC[this.index].categoryID
+            this.default_name = this.listC[this.index].name
           },
           hideModal (event){
             visible.value = false;

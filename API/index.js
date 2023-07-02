@@ -13,6 +13,7 @@ app.use(cookieParser())
 app.use(router)
 
 app.use(cors("*"))
+app.use('/static',express.static('uploads'))
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())

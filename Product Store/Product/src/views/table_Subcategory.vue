@@ -41,17 +41,18 @@
             <a-table
                     :columns="columns"
                     :data-source="listSubC"
-                    :row-key = "getRowKey" 
+                    :row-key = "record => record.subcategoryID" 
                     bordered 
                     
                                   
                             >
                 <template #bodyCell="{ column, index, record }" >
                 <template v-if="column.key == 'name'" >{{ record.name }}</template>
+                <template v-if="column.key == 'categoryID'">{{ this.getnameCategory(record.categoryID) }} </template>
                 <template v-else-if="column.key === 'Editor'">
                    <a-space>
-                    <a-button type="primary" style="background-color: ;"  @click="showModal(index)" :key="index">Edit</a-button>
-                    <a-button type="primary" style="background-color: rgb(255, 44, 44);border: rgb(185, 20, 20); border-radius: ;"  @click="deleteSubCategory(index)" >Delete</a-button>
+                    <a-button type="primary" style="background-color: ;"  @click="showModal(record.subcategoryID)" :key="index">Edit</a-button>
+                    <a-button type="primary" style="background-color: rgb(255, 44, 44);border: rgb(185, 20, 20); border-radius: ;"  @click="deleteSubCategory(record.subcategoryID)" >Delete</a-button>
                     <a-modal
                       v-model:visible="visible"
                       title="Category"
@@ -194,6 +195,7 @@ export default defineComponent({
       selectedKeys: ref<string[]>(['1']),
       columns,
       listSubC : ref([]),
+      nameCategory : ref(''),
       itemRefs : ref([]),
       index : ref(),
       visible,
@@ -265,11 +267,8 @@ export default defineComponent({
       },
     
 
-        async deleteSubCategory(index){
-          let res = await this.listSubC[index].subcategoryID
-          
-          console.log(res)
-           fetch("http://localhost:8080/api/delete_subcategory/"+res,{
+        async deleteSubCategory(subcategoryID){
+           fetch("http://localhost:8080/api/delete_subcategory/"+subcategoryID,{
             method:"POST",
            }).then(response => response.json())
               .then(data => {
@@ -330,7 +329,29 @@ export default defineComponent({
             })
             
         },
-       
+
+        getIndex(index){
+          let i=0;
+          // console.log(this.listC.length)
+          for(i=0;i<this.listSubC.length;i++){
+            // console.log(this.listC[i].categoryID)
+            if(this.listSubC[i].subcategoryID==index){
+              this.index = i;
+              // console.log(this.index)
+            }
+          }
+        },
+
+        getnameCategory(categoryID){
+          let i=0;
+          for(i=0;i<this.listC.length;i++){
+            if(this.listC[i].value==categoryID){
+              let result = this.listC[i].label
+               return result;
+            }
+          }
+        },
+
         getRowKey(record, index) {
           return index; // Return the index as the row key
         },
@@ -351,18 +372,17 @@ export default defineComponent({
             console.log(this.new_categoryID,this.new_name)
         },
         
-         showModal(index){
-            console.log(index)
-            this.index = index
+         showModal(subcategoryID){
+            this.getIndex(subcategoryID)
             visible.value = true;
             let i=0;
             for( i=0;i<this.listC.length;i++){
               console.log( this.listC[i])
-              if(this.listSubC[index].categoryID === this.listC[i].value){
+              if(this.listSubC[this.index].categoryID === this.listC[i].value){
                 this.default_categoryID = this.listC[i].label
               }
             }
-            this.default_name = this.listSubC[index].name
+            this.default_name = this.listSubC[this.index].name
           },
           hideModal (event){
             visible.value = false;

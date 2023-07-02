@@ -5,11 +5,11 @@
         <div class="gutter-box">
             <div class="image" style="width: 100%">
               
-                <img src="../../uploads/488-4889327_10241024-png-png-image-1024-x-1024-transparent.png.png" style="width: 100%; height: 180px;"/>
+                <img :src="url(dataObject,index)" style="width: 100%; height: 180px;"/>
               
             </div>
             <div class="list_shop">
-              <h2>{{ data.name}}</h2>
+              <h2>{{ data.name}} </h2>
               <div  >
                   <p v-for="(store,index) in data.store" :key="index" style="line-height: 10px;">{{ store.shop}}   -  {{store.price}} $</p> 
               </div>
@@ -80,17 +80,27 @@ export default {
   },
   data(){
     return{
-       data1 : this.dataObject
+       data1 : this.dataObject[1],
+       Urlimage : ''
     }
   },
   methods:{
     showinC(){
       console.log(this.dataObject)
     },
+    url(dataObject,index){
+        let image = dataObject
+          
+          this.Urlimage = "http://localhost:8080/static/" + image.data[index].image
+          return this.Urlimage
+        console.log(this.Urlimage)
+         
+    },
     
   },
   mounted(){
     this.showinC()
+  
   }
 };
 </script>

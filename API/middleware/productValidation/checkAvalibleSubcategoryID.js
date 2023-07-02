@@ -1,7 +1,8 @@
 const table  = require("../../db/blog/tableProduct");
 
 const checkSubcategoryAvalibaleID = async(req,res,next) => {
-    const result = await table.subcategoryProdouct.find({subcategoryID: 4})
+    console.log(req.body.subcategoryID,"this");
+    const result = await table.subcategoryProdouct.find({subcategoryID: req.body.subcategoryID})
     let ascess;
     let message;
     console.log(result.length)

@@ -2,7 +2,8 @@
 const table = require("../../../../db/blog/tableProduct");
 const update = async (req,res) => {
     try {
-        console.log(JSON.stringify(req.body));
+        console.log(req.body.name,"hear");
+        console.log(JSON.stringify(req.body),"this1");
         if(req.user.ascess == true) {
             console.log(req.body)
             const result = await table.productProdouct.updateMany(
